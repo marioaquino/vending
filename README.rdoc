@@ -1,0 +1,7 @@
+= vending
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 Mario Aquino. See LICENSE for details.
