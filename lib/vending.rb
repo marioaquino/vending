@@ -6,13 +6,13 @@ module Money
     VALUES[key]
   end
   
-  def Money.coin?(value)
-    COINS.has_value? value
-  end
+  # def Money.coin?(value)
+  #   COINS.has_value? value
+  # end
 
   private
   VALUES = {DOLLAR: 100, QUARTER: 25, DIME: 10, NICKEL: 5}
-  COINS = VALUES.reject{|key, value| value > QUARTER}
+  # COINS = VALUES.reject{|key, value| value > QUARTER}
 end
 
 module VendingMode
