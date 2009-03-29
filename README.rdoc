@@ -1,6 +1,9 @@
 = vending
 
-Description goes here.
+This is an implementation of a vending machine as per the spec from the Lambda Lounge language shootout:
+http://stllambdalounge.files.wordpress.com/2009/03/vendingmachinespecification.pdf
+
+You will need Ruby 1.9 to run the specs/code
 
 == Copyright
 
