@@ -16,11 +16,24 @@ describe VendingMode do
   end
   
   it "should correctly keep track of the amount of money added over successive adds" do
+    @vending.add_money(Money::DOLLAR)
     @vending.add_money(Money::QUARTER)
     @vending.add_money(Money::DIME)
     @vending.add_money(Money::NICKEL)
-    @vending.add_money(Money::DOLLAR)
     @vending.money_added.should == 140
+  end
+  
+  it "should return money added when a sale is cancelled" do
+    @vending.add_money Money::QUARTER
+    @vending.add_money Money::DIME
+    @vending.cancel
+    @vending.coin_return.should include(Money::QUARTER, Money::DIME)
+  end
+  
+  it "should show no money added after a sale is cancelled" do
+    @vending.add_money Money::QUARTER
+    @vending.cancel
+    @vending.money_added.should == 0
   end
   
 end
