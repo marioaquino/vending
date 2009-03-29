@@ -13,10 +13,8 @@ class VendingMachine
   def service(password = nil)
     raise ArgumentError.new('Invalid password') unless @password.eql? password
   end
+
   
-  # def stock_a_with(item)
-  #   @stock[:a] << item
-  # end
 end
 
 # module Money
