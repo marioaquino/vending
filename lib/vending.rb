@@ -33,6 +33,14 @@ module VendingMode
     pre_sale_bin.clear
   end
   
+  def select_a
+    if money_added == 65
+      (purse << pre_sale_bin).flatten!
+      pre_sale_bin.clear
+      pop(:a)
+    end
+  end
+  
   private
   def pre_sale_bin
     @pre_sale_bin ||= []

@@ -36,4 +36,16 @@ describe VendingMode do
     @vending.money_added.should == 0
   end
   
+  it "should sell you an item from the A row if you deposit 65 cents" do
+    @vending.should_receive(:pop).with(:a).and_return(:Doritos)
+    purse = []
+    @vending.should_receive(:purse).and_return(purse)
+    @vending.add_money Money::QUARTER
+    @vending.add_money Money::QUARTER
+    @vending.add_money Money::DIME
+    @vending.add_money Money::NICKEL
+    @vending.select_a.should == :Doritos
+    @vending.money_added.should == 0
+    purse.should include(Money::QUARTER, Money::QUARTER, Money::DIME, Money::NICKEL)
+  end
 end
