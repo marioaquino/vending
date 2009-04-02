@@ -29,13 +29,13 @@ module VendingMode
   end
   
   def cancel
-    (return_tray << pre_sale_bin).flatten!
+    return_tray.concat pre_sale_bin
     pre_sale_bin.clear
   end
   
   def select_a
     if money_added == 65
-      (purse << pre_sale_bin).flatten!
+      purse.concat pre_sale_bin
       pre_sale_bin.clear
       pop(:a)
     end
