@@ -37,7 +37,7 @@ describe VendingMode do
   end
   
   it "should sell you an item from the A row if you deposit 65 cents" do
-    @vending.should_receive(:pop).with(:a).and_return(:Doritos)
+    @vending.should_receive(:dispense).with(:a).and_return(:Doritos)
     purse = []
     @vending.should_receive(:purse).and_return(purse)
     @vending.add_money Money::QUARTER

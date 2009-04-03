@@ -37,7 +37,7 @@ module VendingMode
     if money_added == 65
       purse.concat pre_sale_bin
       pre_sale_bin.clear
-      pop(:a)
+      dispense(:a)
     end
   end
   
