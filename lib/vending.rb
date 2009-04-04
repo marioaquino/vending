@@ -26,11 +26,11 @@ module VendingMode
     pre_sale_bin.clear
   end
   
-  def select_a
-    if money_added == 65
+  def select(column)
+    if column_prices[column] == money_added
       purse.concat pre_sale_bin
       pre_sale_bin.clear
-      dispense(:a)
+      dispense(column)
     end
   end
   
@@ -41,6 +41,10 @@ module VendingMode
   
   def return_tray
     @coin_return_tray ||= []
+  end
+  
+  def column_prices
+    {a: 65, b: 100}
   end
 end
 

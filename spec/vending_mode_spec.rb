@@ -41,13 +41,26 @@ describe VendingMode do
       @purse = []
     end
     
-    it "should dispense an item from the A row if you deposit 65 cents and select A" do
+    def stub_purse_for(column, return_value)
       @vending.should_receive(:purse).and_return(@purse)
-      @vending.should_receive(:dispense).with(:a).and_return(:Doritos)
+      @vending.should_receive(:dispense).with(column).and_return(return_value)  
+    end
+    
+    it "should dispense an item from the A row if you deposit 65 cents and select A" do
+      stub_purse_for :a, :Doritos
       [QUARTER, QUARTER, DIME, NICKEL].each {|coin| @vending.add_money coin}
-      @vending.select_a.should == :Doritos
+      @vending.select(:a).should == :Doritos
       @vending.money_added.should == 0
       @purse.should include(QUARTER, QUARTER, DIME, NICKEL)
     end
+
+    it "should dispense an item from B row if you deposit 1 dollar and select B " do
+      stub_purse_for :b, :DingDongs
+      @vending.add_money DOLLAR
+      @vending.select(:b).should == :DingDongs
+      @vending.money_added.should == 0
+      @purse.should include(DOLLAR)
+    end
+    
   end
 end
