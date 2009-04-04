@@ -1,33 +1,51 @@
 class VendingMachine
-  def initialize(password = nil)
-    raise "Password must be supplied" if password.nil?
-    @password = password
-    @purse = Hash.new
-    @stock = Hash.new {|hash, key| hash[key] = []}
-  end
-  
-  def exact_change_warning?
-    @purse.empty?
-  end
-  
-  def service(password = nil)
-    raise ArgumentError.new('Invalid password') unless @password.eql? password
-  end
-
-  
 end
 
-# module Money
-#   def Money.const_missing(key)
-#     VALUES[key]
-#   end
-#   
-#   def Money.coin?(value)
-#     COINS.has_value? value
-#   end
-# 
-#   private
-#   VALUES = {:QUARTER => 25, :DIME => 10, :NICKEL => 5}
-#   COINS = VALUES.reject{|key, value| value > QUARTER}
-# end
+module Money
+  DOLLAR = 100
+  QUARTER = 25
+  DIME = 10
+  NICKEL = 5
+end
+
+module VendingMode
+  def coin_return
+    return_tray
+  end
+  
+  def add_money(amount)
+    pre_sale_bin << amount
+  end
+  
+  def money_added
+    pre_sale_bin.reduce(0, :+)
+  end
+
+  
+  def cancel
+    return_tray.concat pre_sale_bin
+    pre_sale_bin.clear
+  end
+  
+  def select(column)
+    if column_prices[column] == money_added
+      purse.concat pre_sale_bin
+      pre_sale_bin.clear
+      dispense(column)
+    end
+  end
+  
+  private
+  def pre_sale_bin
+    @pre_sale_bin ||= []
+  end
+  
+  def return_tray
+    @coin_return_tray ||= []
+  end
+  
+  def column_prices
+    {a: 65, b: 100}
+  end
+end
 
