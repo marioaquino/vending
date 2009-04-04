@@ -2,17 +2,10 @@ class VendingMachine
 end
 
 module Money
-  def Money.const_missing(key)
-    VALUES[key]
-  end
-  
-  # def Money.coin?(value)
-  #   COINS.has_value? value
-  # end
-
-  private
-  VALUES = {DOLLAR: 100, QUARTER: 25, DIME: 10, NICKEL: 5}
-  # COINS = VALUES.reject{|key, value| value > QUARTER}
+  DOLLAR = 100
+  QUARTER = 25
+  DIME = 10
+  NICKEL = 5
 end
 
 module VendingMode

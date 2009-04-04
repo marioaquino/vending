@@ -1,5 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
+include Money
+
 describe VendingMode do
   
   before(:each) do
@@ -11,41 +13,35 @@ describe VendingMode do
   end
   
   it "should accept money and display amount added" do
-    @vending.add_money(Money::QUARTER)
+    @vending.add_money(QUARTER)
     @vending.money_added.should == 25
   end
   
   it "should correctly keep track of the amount of money added over successive adds" do
-    @vending.add_money(Money::DOLLAR)
-    @vending.add_money(Money::QUARTER)
-    @vending.add_money(Money::DIME)
-    @vending.add_money(Money::NICKEL)
+    [DOLLAR, QUARTER, DIME, NICKEL].each {|coin| @vending.add_money coin}
     @vending.money_added.should == 140
   end
   
   it "should return money added when a sale is cancelled" do
-    @vending.add_money Money::QUARTER
-    @vending.add_money Money::DIME
+    [QUARTER, DIME ].each {|coin| @vending.add_money coin}
     @vending.cancel
-    @vending.coin_return.should include(Money::QUARTER, Money::DIME)
+    @vending.coin_return.should include(QUARTER, DIME)
   end
   
   it "should show no money added after a sale is cancelled" do
-    @vending.add_money Money::QUARTER
+    @vending.add_money QUARTER
     @vending.cancel
     @vending.money_added.should == 0
   end
   
-  it "should sell you an item from the A row if you deposit 65 cents" do
+  it "should dispense an item from the A row if you deposit 65 cents and select A" do
     @vending.should_receive(:dispense).with(:a).and_return(:Doritos)
     purse = []
     @vending.should_receive(:purse).and_return(purse)
-    @vending.add_money Money::QUARTER
-    @vending.add_money Money::QUARTER
-    @vending.add_money Money::DIME
-    @vending.add_money Money::NICKEL
+    [QUARTER, QUARTER, DIME, NICKEL].each {|coin| @vending.add_money coin}
     @vending.select_a.should == :Doritos
     @vending.money_added.should == 0
-    purse.should include(Money::QUARTER, Money::QUARTER, Money::DIME, Money::NICKEL)
+    purse.should include(QUARTER, QUARTER, DIME, NICKEL)
   end
+  
 end
