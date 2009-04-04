@@ -21,7 +21,6 @@ module VendingMode
     pre_sale_bin.reduce(0, :+)
   end
 
-  
   def cancel
     return_tray.concat pre_sale_bin
     pre_sale_bin.clear
