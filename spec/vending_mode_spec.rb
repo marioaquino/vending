@@ -41,25 +41,25 @@ describe VendingMode do
       @purse = []
     end
     
-    def stub_purse_for(column, return_value)
+    def do_test_for_column(column, product, *money)
       @vending.should_receive(:purse).and_return(@purse)
-      @vending.should_receive(:dispense).with(column).and_return(return_value)  
+      @vending.should_receive(:dispense).with(column).and_return(product)  
+      money.each {|denomination| @vending.add_money denomination}
+      @vending.select(column).should == product
+      @vending.money_added.should == 0
+      @purse.should include(*money)
     end
     
-    it "should dispense an item from the A row if you deposit 65 cents and select A" do
-      stub_purse_for :a, :Doritos
-      [QUARTER, QUARTER, DIME, NICKEL].each {|coin| @vending.add_money coin}
-      @vending.select(:a).should == :Doritos
-      @vending.money_added.should == 0
-      @purse.should include(QUARTER, QUARTER, DIME, NICKEL)
+    it "should dispense an item from the A column if you deposit 65 cents and select A" do
+      do_test_for_column :a, :Doritos, QUARTER, QUARTER, DIME, NICKEL
     end
 
-    it "should dispense an item from B row if you deposit 1 dollar and select B " do
-      stub_purse_for :b, :DingDongs
-      @vending.add_money DOLLAR
-      @vending.select(:b).should == :DingDongs
-      @vending.money_added.should == 0
-      @purse.should include(DOLLAR)
+    it "should dispense an item from B column if you deposit 1 dollar and select B" do
+      do_test_for_column :b, :DingDongs, DOLLAR
+    end
+    
+    it "should dispense an item from column C if you deposit 1 dollar and 50 cents and select C" do
+      do_test_for_column :c, :MicrowaveHamburger, DOLLAR, QUARTER, QUARTER
     end
     
   end

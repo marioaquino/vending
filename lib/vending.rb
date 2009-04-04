@@ -45,7 +45,7 @@ module VendingMode
   end
   
   def column_prices
-    {a: 65, b: 100}
+    {a: 65, b: 100, c: 150}
   end
 end
 
