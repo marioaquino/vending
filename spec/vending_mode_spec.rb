@@ -39,13 +39,13 @@ describe VendingMode do
   context "during sales" do
 
     def do_test_for_column(column, product, *money)
-      purse = []
+      purse = mock("purse")
+      purse.should_receive(:deposit).with(money) {|money_arr| money_arr.clear}
       @vending.should_receive(:purse).and_return(purse)
       @vending.should_receive(:dispense).with(column).and_return(product)  
       money.each {|denomination| @vending.add_money denomination}
       @vending.select(column).should == product
       @vending.money_added.should == 0
-      purse.should include(*money)
     end
     
     it "should dispense an item from the A column if you deposit 65 cents and select A" do

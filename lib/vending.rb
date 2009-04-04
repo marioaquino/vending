@@ -28,8 +28,7 @@ module VendingMode
   
   def select(column)
     if column_prices[column] == money_added
-      purse.concat pre_sale_bin
-      pre_sale_bin.clear
+      purse.deposit pre_sale_bin
       dispense(column)
     end
   end
