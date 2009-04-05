@@ -60,5 +60,7 @@ describe VendingMode do
       do_test_for_column :c, :MicrowaveHamburger, DOLLAR, QUARTER, QUARTER
     end
     
+    it "should return change if more than the sale price was added"
+    
   end
 end
