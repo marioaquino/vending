@@ -44,7 +44,8 @@ describe VendingMode do
       @vending.should_receive(:purse).and_return(purse)
       @vending.should_receive(:dispense).with(column).and_return(product)  
       money.each {|denomination| @vending.add_money denomination}
-      @vending.select(column).should == product
+      @vending.select(column)
+      @vending.dispensary.should include(product)
       @vending.money_added.should == 0
     end
     
@@ -69,7 +70,8 @@ describe VendingMode do
       @vending.should_receive(:dispense).with(:a).and_return(:Doritos)  
       
       @vending.add_money DOLLAR
-      @vending.select(:a).should == :Doritos
+      @vending.select(:a)
+      @vending.dispensary.should include(:Doritos)
       @vending.coin_return.should include(QUARTER, DIME)
     end
   end

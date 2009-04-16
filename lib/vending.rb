@@ -13,6 +13,10 @@ module VendingMode
     return_tray
   end
   
+  def dispensary
+    dispensary_bin
+  end
+  
   def add_money(amount)
     pre_sale_bin << amount
   end
@@ -38,7 +42,7 @@ module VendingMode
       end
     end      
     
-    dispense(column)
+    dispensary_bin << dispense(column)
   end
   
   private
@@ -48,6 +52,10 @@ module VendingMode
   
   def return_tray
     @coin_return_tray ||= []
+  end
+  
+  def dispensary_bin
+    @dispensary_bin ||= []
   end
   
   def column_prices
