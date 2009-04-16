@@ -27,8 +27,17 @@ module VendingMode
   end
   
   def select(column)
-    if column_prices[column] == money_added
+    change = money_added - column_prices[column]
+    if (change >= 0)
       purse.deposit pre_sale_bin
+            
+      change_scheme.each_pair do |coin, withdraw_method|
+        while (change >= coin)
+          change -= coin
+          return_tray << purse.send(withdraw_method)
+        end
+      end      
+      
       dispense(column)
     end
   end
@@ -45,5 +54,8 @@ module VendingMode
   def column_prices
     {a: 65, b: 100, c: 150}
   end
+  
+  def change_scheme
+    {QUARTER => :withdraw_quarter, DIME => :withdraw_dime, NICKEL => :withdraw_nickel}
+  end
 end
-

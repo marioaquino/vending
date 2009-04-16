@@ -60,7 +60,17 @@ describe VendingMode do
       do_test_for_column :c, :MicrowaveHamburger, DOLLAR, QUARTER, QUARTER
     end
     
-    it "should return change if more than the sale price was added"
-    
+    it "should return change if more than the sale price was added" do
+      purse = mock("purse")
+      purse.should_receive(:deposit).with(DOLLAR) {|money_arr| money_arr.clear}
+      purse.should_receive(:withdraw_quarter).and_return(QUARTER)
+      purse.should_receive(:withdraw_dime).and_return(DIME)
+      @vending.should_receive(:purse).any_number_of_times.and_return(purse)
+      @vending.should_receive(:dispense).with(:a).and_return(:Doritos)  
+      
+      @vending.add_money DOLLAR
+      @vending.select(:a).should == :Doritos
+      @vending.coin_return.should include(QUARTER, DIME)
+    end
   end
 end
