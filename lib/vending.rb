@@ -59,7 +59,7 @@ module VendingMode
   end
   
   def column_prices
-    {a: 65, b: 100, c: 150}
+    {:a => 65, :b => 100, :c => 150}
   end
   
   def purse_change_methods
