@@ -37,18 +37,6 @@ describe VendingMode do
   end
 
   context "during sales" do
-
-    def do_test_for_column(column, product, *money)
-      purse = mock("purse")
-      purse.should_receive(:deposit).with(money) {|money_arr| money_arr.clear}
-      @vending.should_receive(:purse).and_return(purse)
-      @vending.should_receive(:dispense).with(column).and_return(product)  
-      money.each {|denomination| @vending.add_money denomination}
-      @vending.select(column)
-      @vending.dispensary.should include(product)
-      @vending.money_added.should == 0
-    end
-    
     it "should dispense an item from the A column if you deposit 65 cents and select A" do
       do_test_for_column :a, :Doritos, QUARTER, QUARTER, DIME, NICKEL
     end
@@ -62,10 +50,10 @@ describe VendingMode do
     end
     
     it "should return change if more than the sale price was added" do
-      purse = mock("purse")
-      purse.should_receive(:deposit).with(DOLLAR) {|money_arr| money_arr.clear}
-      purse.should_receive(:withdraw_quarter).and_return(QUARTER)
-      purse.should_receive(:withdraw_dime).and_return(DIME)
+      purse = mock_purse DOLLAR
+      {:withdraw_quarter => QUARTER, :withdraw_dime => DIME}.each_pair do |method, return_value|
+        purse.should_receive(method).and_return(return_value)
+      end
       @vending.should_receive(:purse).any_number_of_times.and_return(purse)
       @vending.should_receive(:dispense).with(:a).and_return(:Doritos)  
       
@@ -73,6 +61,21 @@ describe VendingMode do
       @vending.select(:a)
       @vending.dispensary.should include(:Doritos)
       @vending.coin_return.should include(QUARTER, DIME)
+    end
+    
+    def mock_purse(*money)
+      purse = mock("purse")
+      purse.should_receive(:deposit).with(money) {|money_arr| money_arr.clear}
+      purse
+    end
+
+    def do_test_for_column(column, product, *money)
+      @vending.should_receive(:purse).and_return(mock_purse money)
+      @vending.should_receive(:dispense).with(column).and_return(product)  
+      money.each {|denomination| @vending.add_money denomination}
+      @vending.select(column)
+      @vending.dispensary.should include(product)
+      @vending.money_added.should == 0
     end
   end
 end
