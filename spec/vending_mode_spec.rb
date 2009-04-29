@@ -2,6 +2,12 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 include Money
 
+def mock_purse(*money)
+  purse = mock("purse")
+  purse.should_receive(:deposit).with(money) {|money_arr| money_arr.clear}
+  purse
+end
+
 describe VendingMode do
   
   before(:each) do
@@ -63,12 +69,6 @@ describe VendingMode do
       @vending.coin_return.should include(QUARTER, DIME)
     end
     
-    def mock_purse(*money)
-      purse = mock("purse")
-      purse.should_receive(:deposit).with(money) {|money_arr| money_arr.clear}
-      purse
-    end
-
     def do_test_for_column(column, product, *money)
       @vending.should_receive(:purse).and_return(mock_purse money)
       @vending.should_receive(:dispense).with(column).and_return(product)  
@@ -77,5 +77,33 @@ describe VendingMode do
       @vending.dispensary.should include(product)
       @vending.money_added.should == 0
     end
+  end
+end
+
+describe ServiceMode do
+  
+  before(:each) do
+    @serv = Object.new.extend(ServiceMode)
+  end
+  
+  it "should store items in columns" do
+    supply_bin = Hash.new { |hash, key| hash[key] = [] }
+    @serv.should_receive(:supply_bin).any_number_of_times.and_return(supply_bin)
+    doritos = [:Doritos, :Doritos, :Doritos]
+    @serv.stock(:a, *doritos)
+    supply_bin[:a].should == doritos
+  end
+  
+  it "should have a purse that you can deposit change into" do
+    change = [QUARTER, DIME, NICKEL] * 3
+    @serv.should_receive(:purse).and_return(mock_purse *change)
+    @serv.deposit *change
+  end
+  
+  it "should have a purse that you can empty" do
+    purse = mock("purse")
+    purse.should_receive(:empty).and_return([DOLLAR, QUARTER, DIME, NICKEL])
+    @serv.should_receive(:purse).and_return(purse)
+    @serv.empty_bank.should include(DOLLAR, QUARTER, DIME, NICKEL)
   end
 end

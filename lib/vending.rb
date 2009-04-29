@@ -66,3 +66,17 @@ module VendingMode
     {QUARTER => :withdraw_quarter, DIME => :withdraw_dime, NICKEL => :withdraw_nickel}
   end
 end
+
+module ServiceMode
+  def stock(column, *items)
+    supply_bin[column].concat(items)
+  end
+  
+  def deposit(*change)
+    purse.deposit change
+  end
+  
+  def empty_bank
+    purse.empty
+  end
+end
