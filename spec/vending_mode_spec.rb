@@ -77,6 +77,12 @@ describe VendingMode do
       @vending.dispensary.should include(product)
       @vending.money_added.should == 0
     end
+    
+    it "should throw an exception if insufficient funds have been provided during a sales attempt" do
+      {a: '0.65', b: '1.00', c: '1.50'}.each_pair do |column, amount|
+        lambda { @vending.select(column) }.should raise_error(RuntimeError, "$#{amount} required for sale")
+      end
+    end
   end
 end
 

@@ -32,7 +32,9 @@ module VendingMode
   
   def select(column)
     change = money_added - column_prices[column]
-    return unless change >= 0
+
+    raise format("$%.2f required for sale", (column_prices[column] * 0.01)) unless change >= 0
+
     purse.deposit pre_sale_bin
           
     purse_change_methods.each_pair do |coin, withdraw_method|
