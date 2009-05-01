@@ -47,6 +47,11 @@ module VendingMode
     dispensary_bin << dispense(column)
   end
   
+  def service(password)
+    raise 'Invalid service password' unless valid_password?(password)
+    toggle_operation_mode
+  end
+
   private
   def pre_sale_bin
     @pre_sale_bin ||= []
@@ -75,10 +80,14 @@ module ServiceMode
   end
   
   def deposit(*change)
-    purse.deposit change
+    purse.deposit(change)
   end
   
   def empty_bank
     purse.empty
+  end
+  
+  def activate_vending
+    toggle_operation_mode
   end
 end

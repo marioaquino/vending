@@ -8,10 +8,27 @@ def mock_purse(*money)
   purse
 end
 
+def new_supply_bin
+  Hash.new { |hash, key| hash[key] = [] }
+end
+
 describe VendingMode do
   
   before(:each) do
     @vending = Object.new.extend(VendingMode)
+  end
+  
+  context "ready for vending" do
+    it "should go into service mode when the service password is supplied" do
+      @vending.should_receive(:valid_password?).with('password').and_return(true)
+      @vending.should_receive(:toggle_operation_mode)
+      @vending.service 'password'
+    end
+    
+    it "should complain if an invalid service password was supplied" do
+      @vending.should_receive(:valid_password?).with('password').and_return(false)
+      lambda { @vending.service 'password' }.should raise_error(RuntimeError, 'Invalid service password')
+    end
   end
   
   context "accepting money" do
@@ -93,9 +110,9 @@ describe ServiceMode do
   end
   
   it "should store items in columns" do
-    supply_bin = Hash.new { |hash, key| hash[key] = [] }
+    supply_bin = new_supply_bin
     @serv.should_receive(:supply_bin).any_number_of_times.and_return(supply_bin)
-    doritos = [:Doritos, :Doritos, :Doritos]
+    doritos = [:Doritos] * 3
     @serv.stock(:a, *doritos)
     supply_bin[:a].should == doritos
   end
@@ -111,5 +128,31 @@ describe ServiceMode do
     purse.should_receive(:empty).and_return([DOLLAR, QUARTER, DIME, NICKEL])
     @serv.should_receive(:purse).and_return(purse)
     @serv.empty_bank.should include(DOLLAR, QUARTER, DIME, NICKEL)
+  end
+  
+  it "should support ending the service mode" do
+    @serv.should_receive(:toggle_operation_mode)
+    @serv.activate_vending
+  end
+end
+
+describe VendingMachine do
+  
+  context "ready for operation" do
+    it "should not allow service mode operations in vending mode"
+    
+    it "should not allow vending model operations in service mode"
+    
+    it "should display all items for sale" do
+      pending
+      supply_bin = new_supply_bin
+      {a: :Doritos, b: :DingDongs, c: :MicrowaveHamburger}.each_pair do |column, item|
+        supply_bin[column].concat([item] * 3)
+      end
+      @mach.should_receive(:supply_bin).any_number_of_times.and_return(supply_bin)
+      @vending.sale_items_by_column.should == supply_bin
+    end
+    
+    it "should show the prices for all sales columns" 
   end
 end
