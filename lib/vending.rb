@@ -1,11 +1,38 @@
-class VendingMachine
-end
+require 'forwardable'
 
 module Money
   DOLLAR = 100
   QUARTER = 25
   DIME = 10
   NICKEL = 5
+end
+
+class VendingMachine
+  def initialize(password)
+    @password = password
+    named_context = Struct.new(:name, :delegate).extend(Forwardable)
+    named_context.def_delegators :delegate, :toggle_operation_mode, :valid_password?
+    vending_mode = named_context.new('vending', self).extend(VendingMode)
+    service_mode = named_context.new('service', self).extend(ServiceMode)
+    @context = vending_mode
+    @modes = [vending_mode, service_mode]
+  end
+  
+  def method_missing(meth, *args, &blk)
+    raise "Invalid #{context.name} operation" unless context.respond_to? meth
+    context.send meth, *args, &blk
+  end
+  
+  private
+  attr_reader :modes, :context
+  
+  def toggle_operation_mode
+    @context = modes.index(context) == 0 ? modes.last : modes.first
+  end
+  
+  def valid_password?(password)
+    @password == password
+  end
 end
 
 module VendingMode

@@ -139,9 +139,19 @@ end
 describe VendingMachine do
   
   context "ready for operation" do
-    it "should not allow service mode operations in vending mode"
     
-    it "should not allow vending model operations in service mode"
+    before(:each) do
+      @machine = VendingMachine.new 'password'
+    end
+    
+    it "should not allow service mode operations in vending mode" do
+      lambda { @machine.activate_vending }.should raise_error(RuntimeError, 'Invalid vending operation')
+    end
+    
+    it "should not allow vending model operations in service mode" do
+      @machine.service 'password'
+      lambda { @machine.add_money QUARTER }.should raise_error(RuntimeError, 'Invalid service operation')
+    end
     
     it "should display all items for sale" do
       pending
