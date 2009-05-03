@@ -6,7 +6,7 @@ This is an implementation of a vending machine as per the spec from the Lambda L
 You will need Ruby 1.9 to run the specs/code
 
 The core concept of this implementation is illustrated as follows:  
-![delegation strategy](/doc/core.png "Context Modules delegated to for operations")
+![delegation strategy](doc/core.png "Context Modules delegated to for operations")
 
 Copyright
 ---------
