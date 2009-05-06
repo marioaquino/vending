@@ -154,15 +154,16 @@ describe VendingMachine do
     end
     
     it "should display all items for sale" do
-      pending
-      supply_bin = new_supply_bin
-      {a: :Doritos, b: :DingDongs, c: :MicrowaveHamburger}.each_pair do |column, item|
-        supply_bin[column].concat([item] * 3)
+      @machine.service 'password'
+      supplies = {a: [:Doritos] * 3, b: [:DingDongs] * 3, c: [:MicrowaveHamburger] *3 }
+      supplies.each_pair do |column, item|
+        @machine.stock column, *item
       end
-      @mach.should_receive(:supply_bin).any_number_of_times.and_return(supply_bin)
-      @vending.sale_items_by_column.should == supply_bin
+      @machine.sale_items_by_column.should == supplies
     end
     
-    it "should show the prices for all sales columns" 
+    it "should show the prices for all sales columns" do
+      @machine.sale_prices_by_column.should == {a: '$0.65', b: '$1.00', c: '$1.50'}
+    end
   end
 end

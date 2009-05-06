@@ -11,7 +11,8 @@ class VendingMachine
   def initialize(password)
     @password = password
     named_context = Struct.new(:name, :delegate).extend(Forwardable)
-    named_context.def_delegators :delegate, :toggle_operation_mode, :valid_password?
+    named_context.def_delegators :delegate, :toggle_operation_mode, 
+                                 :valid_password?, :supply_bin
     vending_mode = named_context.new('vending', self).extend(VendingMode)
     service_mode = named_context.new('service', self).extend(ServiceMode)
     @context = vending_mode
@@ -21,6 +22,10 @@ class VendingMachine
   def method_missing(meth, *args, &blk)
     raise "Invalid #{context.name} operation" unless context.respond_to? meth
     context.send meth, *args, &blk
+  end
+  
+  def sale_items_by_column
+    supply_bin.dup
   end
   
   private
@@ -33,6 +38,11 @@ class VendingMachine
   def valid_password?(password)
     @password == password
   end
+  
+  def supply_bin
+    @supply_bin ||= Hash.new { |hash, key| hash[key] = [] }
+  end
+  
 end
 
 module VendingMode
@@ -60,7 +70,7 @@ module VendingMode
   def select(column)
     change = money_added - column_prices[column]
 
-    raise format("$%.2f required for sale", (column_prices[column] * 0.01)) unless change >= 0
+    raise format("#{column_price(column)} required for sale") unless change >= 0
 
     purse.deposit pre_sale_bin
           
@@ -74,12 +84,21 @@ module VendingMode
     dispensary_bin << dispense(column)
   end
   
+  def sale_prices_by_column
+    prices = column_prices.dup
+    prices.each{|col, price| prices[col] = column_price(col)}
+  end
+  
   def service(password)
     raise 'Invalid service password' unless valid_password?(password)
     toggle_operation_mode
   end
 
   private
+  def column_price(column)
+    format('$%.2f', column_prices[column] * 0.01)
+  end
+  
   def pre_sale_bin
     @pre_sale_bin ||= []
   end
@@ -95,7 +114,7 @@ module VendingMode
   def column_prices
     {:a => 65, :b => 100, :c => 150}
   end
-  
+    
   def purse_change_methods
     {QUARTER => :withdraw_quarter, DIME => :withdraw_dime, NICKEL => :withdraw_nickel}
   end
