@@ -1,7 +1,5 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-include Money
-
 def mock_purse(*money)
   purse = mock("purse")
   purse.should_receive(:deposit).with(money) {|money_arr| money_arr.clear}
@@ -138,11 +136,11 @@ end
 
 describe VendingMachine do
   
-  context "ready for operation" do
-    
-    before(:each) do
-      @machine = VendingMachine.new 'password'
-    end
+  before(:each) do
+    @machine = VendingMachine.new 'password'
+  end
+  
+  context "empty but ready for operation" do
     
     it "should not allow service mode operations in vending mode" do
       lambda { @machine.activate_vending }.should raise_error(RuntimeError, 'Invalid vending operation')
@@ -153,17 +151,40 @@ describe VendingMachine do
       lambda { @machine.add_money QUARTER }.should raise_error(RuntimeError, 'Invalid service operation')
     end
     
-    it "should display all items for sale" do
-      @machine.service 'password'
-      supplies = {a: [:Doritos] * 3, b: [:DingDongs] * 3, c: [:MicrowaveHamburger] *3 }
-      supplies.each_pair do |column, item|
-        @machine.stock column, *item
-      end
-      @machine.sale_items_by_column.should == supplies
-    end
     
     it "should show the prices for all sales columns" do
       @machine.sale_prices_by_column.should == {a: '$0.65', b: '$1.00', c: '$1.50'}
+    end
+    
+    it "should show the exact change needed message when the purse is empty" do
+      @machine.exact_change_needed?.should be_true
+    end
+  end
+  
+  context "stocked and ready for customers" do
+    before(:each) do
+      @machine.service 'password'
+      @supplies = {a: [:Doritos] * 3, b: [:DingDongs] * 3, c: [:MicrowaveHamburger] *3 }
+      @supplies.each_pair do |column, item|
+        @machine.stock column, *item
+      end
+      @machine.activate_vending
+    end
+    
+    it "should display all items for sale" do
+      @machine.sale_items_by_column.should == @supplies
+    end
+    
+    it "should not sell me an item if it can't make change and give me my money back" do
+      @machine.add_money DOLLAR
+      lambda { @machine.select(:a) }.should raise_error(RuntimeError, 'Exact change required')
+      @machine.coin_return.should == [DOLLAR]
+    end
+    
+    it "should sell me an item from the first column if I give it enough money" do
+      [QUARTER, QUARTER, DIME, NICKEL].each {|coin| @machine.add_money coin}
+      @machine.select :a
+      @machine.dispensary.should == [:Doritos]
     end
   end
 end

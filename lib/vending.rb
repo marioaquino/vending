@@ -1,22 +1,19 @@
 require 'forwardable'
-
-module Money
-  DOLLAR = 100
-  QUARTER = 25
-  DIME = 10
-  NICKEL = 5
-end
+require 'purse'
+require 'money'
 
 class VendingMachine
   def initialize(password)
     @password = password
     named_context = Struct.new(:name, :delegate).extend(Forwardable)
     named_context.def_delegators :delegate, :toggle_operation_mode, 
-                                 :valid_password?, :supply_bin
+                                 :valid_password?, :supply_bin, :purse, :dispense
     vending_mode = named_context.new('vending', self).extend(VendingMode)
     service_mode = named_context.new('service', self).extend(ServiceMode)
     @context = vending_mode
     @modes = [vending_mode, service_mode]
+    @purse = Purse.new
+    @supply_bin = Hash.new { |hash, key| hash[key] = [] }
   end
   
   def method_missing(meth, *args, &blk)
@@ -28,8 +25,12 @@ class VendingMachine
     supply_bin.dup
   end
   
+  def exact_change_needed?
+    purse.has_coins? == false
+  end
+  
   private
-  attr_reader :modes, :context
+  attr_reader :modes, :context, :supply_bin, :purse
   
   def toggle_operation_mode
     @context = modes.index(context) == 0 ? modes.last : modes.first
@@ -38,11 +39,10 @@ class VendingMachine
   def valid_password?(password)
     @password == password
   end
-  
-  def supply_bin
-    @supply_bin ||= Hash.new { |hash, key| hash[key] = [] }
+    
+  def dispense(column)
+    supply_bin[column].shift
   end
-  
 end
 
 module VendingMode
@@ -71,17 +71,24 @@ module VendingMode
     change = money_added - column_prices[column]
 
     raise format("#{column_price(column)} required for sale") unless change >= 0
-
-    purse.deposit pre_sale_bin
-          
-    purse_change_methods.each_pair do |coin, withdraw_method|
-      while (change >= coin)
-        change -= coin
-        return_tray << purse.send(withdraw_method)
-      end
-    end      
     
-    dispensary_bin << dispense(column)
+    begin
+      purse.deposit pre_sale_bin
+          
+      purse_change_methods.each_pair do |coin, withdraw_method|
+        while (change >= coin)
+          change -= coin
+          return_tray << purse.send(withdraw_method)
+        end
+      end      
+    
+      dispensary_bin << dispense(column)
+    rescue CannotMakeChangeError
+      return_tray.concat pre_sale_bin
+      raise RuntimeError, 'Exact change required'
+    ensure
+      pre_sale_bin.clear
+    end
   end
   
   def sale_prices_by_column
