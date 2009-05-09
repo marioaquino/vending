@@ -18,7 +18,7 @@ class VendingMachine
   
   def method_missing(meth, *args, &blk)
     raise "Invalid #{context.name} operation" unless context.respond_to? meth
-    context.send meth, *args, &blk
+    context.public_send meth, *args, &blk
   end
   
   def sale_items_by_column
