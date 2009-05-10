@@ -30,11 +30,19 @@ Spec::Rake::SpecTask.new(:spec) do |spec|
   spec.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+namespace :spec do
+  desc "Run all specs in spec directory with RCov"
+  Spec::Rake::SpecTask.new(:rcov) do |spec|
+    spec.libs << 'lib' << 'spec'
+    spec.pattern = 'spec/**/*_spec.rb'
+    spec.rcov = true
+  end
+  
+  desc "Print Specdoc for all specs"
+  Spec::Rake::SpecTask.new(:doc) do |t|
+    t.spec_opts = ["--format", "specdoc", "--dry-run"]
+    t.spec_files = FileList['spec/**/*_spec.rb']
+  end
 end
-
 
 task :default => :spec
