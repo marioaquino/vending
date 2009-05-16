@@ -79,7 +79,7 @@ describe VendingMode do
       @vending.should_receive(:dispense).with(:a).and_return(:Doritos)  
       
       @vending.add_money DOLLAR
-      @vending.select(:a)
+      @vending.make_selection(:a)
       @vending.dispensary.should include(:Doritos)
       @vending.coin_return.should include(QUARTER, DIME)
     end
@@ -88,14 +88,14 @@ describe VendingMode do
       @vending.should_receive(:purse).and_return(mock_purse money)
       @vending.should_receive(:dispense).with(column).and_return(product)  
       money.each {|denomination| @vending.add_money denomination}
-      @vending.select(column)
+      @vending.make_selection(column)
       @vending.dispensary.should include(product)
       @vending.money_added.should == 0
     end
     
     it "should throw an exception if insufficient funds have been provided during a sales attempt" do
       {a: '0.65', b: '1.00', c: '1.50'}.each_pair do |column, amount|
-        lambda { @vending.select(column) }.should raise_error(RuntimeError, "$#{amount} required for sale")
+        lambda { @vending.make_selection(column) }.should raise_error(RuntimeError, "$#{amount} required for sale")
       end
     end
   end
@@ -177,13 +177,13 @@ describe VendingMachine do
     
     it "should not sell me an item if it can't make change and give me my money back" do
       @machine.add_money DOLLAR
-      lambda { @machine.select(:a) }.should raise_error(RuntimeError, 'Exact change required')
+      lambda { @machine.make_selection(:a) }.should raise_error(RuntimeError, 'Exact change required')
       @machine.coin_return.should == [DOLLAR]
     end
     
     it "should sell me an item from the first column if I give it enough money" do
       [QUARTER, QUARTER, DIME, NICKEL].each {|coin| @machine.add_money coin}
-      @machine.select :a
+      @machine.make_selection :a
       @machine.dispensary.should == [:Doritos]
     end
   end

@@ -6,19 +6,13 @@ class VendingMachine
   def initialize(password)
     @password = password
     named_context = Struct.new(:name, :delegate).extend(Forwardable)
-    named_context.def_delegators :delegate, :toggle_operation_mode, 
-                                 :valid_password?, :supply_bin, :purse, :dispense
+    named_context.def_delegators :delegate, :method_missing
     vending_mode = named_context.new('vending', self).extend(VendingMode)
     service_mode = named_context.new('service', self).extend(ServiceMode)
     @context = vending_mode
     @modes = [vending_mode, service_mode]
     @purse = Purse.new
     @supply_bin = Hash.new { |hash, key| hash[key] = [] }
-  end
-  
-  def method_missing(meth, *args, &blk)
-    raise "Invalid #{context.name} operation" unless context.respond_to? meth
-    context.public_send meth, *args, &blk
   end
   
   def sale_items_by_column
@@ -32,6 +26,12 @@ class VendingMachine
   private
   attr_reader :modes, :context, :supply_bin, :purse
   
+  def method_missing(meth, *args, &blk)
+    return send(meth, *args, &blk) if (respond_to? meth, true)
+    raise "Invalid #{context.name} operation" unless context.respond_to? meth
+    context.public_send meth, *args, &blk
+  end
+    
   def toggle_operation_mode
     @context = modes.index(context) == 0 ? modes.last : modes.first
   end
@@ -67,7 +67,7 @@ module VendingMode
     pre_sale_bin.clear
   end
   
-  def select(column)
+  def make_selection(column)
     change = money_added - column_prices[column]
 
     raise format("#{column_price(column)} required for sale") unless change >= 0
@@ -123,7 +123,7 @@ module VendingMode
   end
     
   def purse_change_methods
-    {QUARTER => :withdraw_quarter, DIME => :withdraw_dime, NICKEL => :withdraw_nickel}
+    {Money::QUARTER => :withdraw_quarter, Money::DIME => :withdraw_dime, Money::NICKEL => :withdraw_nickel}
   end
 end
 
