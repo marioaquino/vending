@@ -58,8 +58,8 @@ module VendingMode
     pre_sale_bin << amount
   end
   
-  def money_added
-    pre_sale_bin.reduce(0, :+)
+  def money_deposited
+    monetize pre_sale_cents
   end
 
   def cancel
@@ -68,7 +68,7 @@ module VendingMode
   end
   
   def make_selection(column)
-    change = money_added - column_prices[column]
+    change = pre_sale_cents - column_prices[column]
 
     raise format("#{column_price(column)} required for sale") unless change >= 0
     
@@ -102,8 +102,16 @@ module VendingMode
   end
 
   private
+  def pre_sale_cents
+    pre_sale_bin.reduce(0, :+)
+  end
+  
   def column_price(column)
-    format('$%.2f', column_prices[column] * 0.01)
+    monetize column_prices[column]
+  end
+  
+  def monetize(value)
+    format('$%.2f', value * 0.01)
   end
   
   def pre_sale_bin

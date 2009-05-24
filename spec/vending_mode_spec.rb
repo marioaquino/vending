@@ -36,12 +36,12 @@ describe VendingMode do
   
     it "should accept money and display amount added" do
       @vending.add_money(QUARTER)
-      @vending.money_added.should == 25
+      @vending.money_deposited.should == '$0.25'
     end
   
     it "should correctly keep track of the amount of money added over successive adds" do
       [DOLLAR, QUARTER, DIME, NICKEL].each {|coin| @vending.add_money coin}
-      @vending.money_added.should == 140
+      @vending.money_deposited.should == '$1.40'
     end
   
     it "should return money added when a sale is cancelled" do
@@ -53,7 +53,7 @@ describe VendingMode do
     it "should show no money added after a sale is cancelled" do
       @vending.add_money QUARTER
       @vending.cancel
-      @vending.money_added.should == 0
+      @vending.money_deposited.should == '$0.00'
     end
   end
 
@@ -90,7 +90,7 @@ describe VendingMode do
       money.each {|denomination| @vending.add_money denomination}
       @vending.make_selection(column)
       @vending.dispensary.should include(product)
-      @vending.money_added.should == 0
+      @vending.money_deposited.should == '$0.00'
     end
     
     it "should throw an exception if insufficient funds have been provided during a sales attempt" do
