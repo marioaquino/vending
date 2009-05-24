@@ -7,6 +7,9 @@
 		addToTargets = (
 			8D1107260486CEB800E47090 /* vending */,
 		);
+		breakpoints = (
+			AC03B9150FC9F4F100BBD42C /* VendingMachineUI.rb:59 */,
+		);
 		codeSenseManager = AC5C439D0FBF6E57003A9F44 /* Code sense */;
 		executables = (
 			AC5C43890FBF6E46003A9F44 /* vending */,
@@ -17,7 +20,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					513,
+					994,
 					20,
 					48,
 					43,
@@ -34,22 +37,22 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 264817613;
-			PBXWorkspaceStateSaveDate = 264817613;
+			PBXPerProjectTemplateStateSaveDate = 264842455;
+			PBXWorkspaceStateSaveDate = 264842455;
 		};
 		perUserProjectItems = {
-			ACB67E1A0FC8CCE400944907 /* PBXTextBookmark */ = ACB67E1A0FC8CCE400944907 /* PBXTextBookmark */;
+			AC03B88B0FC92CE100BBD42C /* PBXTextBookmark */ = AC03B88B0FC92CE100BBD42C /* PBXTextBookmark */;
+			AC03B88C0FC92CE100BBD42C /* PBXTextBookmark */ = AC03B88C0FC92CE100BBD42C /* PBXTextBookmark */;
+			AC03B9200FC9F5FB00BBD42C /* PBXTextBookmark */ = AC03B9200FC9F5FB00BBD42C /* PBXTextBookmark */;
+			AC03B9220FC9F5FD00BBD42C /* PBXTextBookmark */ = AC03B9220FC9F5FD00BBD42C /* PBXTextBookmark */;
 			ACB67E1B0FC8CCE400944907 /* PBXTextBookmark */ = ACB67E1B0FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E1C0FC8CCE400944907 /* PBXTextBookmark */ = ACB67E1C0FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E1D0FC8CCE400944907 /* PBXTextBookmark */ = ACB67E1D0FC8CCE400944907 /* PBXTextBookmark */;
-			ACB67E1E0FC8CCE400944907 /* PBXTextBookmark */ = ACB67E1E0FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E1F0FC8CCE400944907 /* PBXTextBookmark */ = ACB67E1F0FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E200FC8CCE400944907 /* PBXTextBookmark */ = ACB67E200FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E210FC8CCE400944907 /* PBXTextBookmark */ = ACB67E210FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E220FC8CCE400944907 /* PBXTextBookmark */ = ACB67E220FC8CCE400944907 /* PBXTextBookmark */;
 			ACB67E230FC8CCE400944907 /* PBXTextBookmark */ = ACB67E230FC8CCE400944907 /* PBXTextBookmark */;
-			ACB67E240FC8CCE400944907 /* PBXTextBookmark */ = ACB67E240FC8CCE400944907 /* PBXTextBookmark */;
-			ACB67E250FC8CCE400944907 /* PBXTextBookmark */ = ACB67E250FC8CCE400944907 /* PBXTextBookmark */;
 		};
 		sourceControlManager = AC5C439C0FBF6E57003A9F44 /* Source Control */;
 		userBuildSettings = {
@@ -74,6 +77,62 @@
 		executables = (
 			AC5C43890FBF6E46003A9F44 /* vending */,
 		);
+	};
+	AC03B88B0FC92CE100BBD42C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = ACB67E110FC8CBF700944907 /* vending.rb */;
+		name = "vending.rb: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 128;
+		vrLoc = 0;
+	};
+	AC03B88C0FC92CE100BBD42C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = ACB67E110FC8CBF700944907 /* vending.rb */;
+		name = "vending.rb: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 128;
+		vrLoc = 0;
+	};
+	AC03B9150FC9F4F100BBD42C /* VendingMachineUI.rb:59 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = ACB67E150FC8CC0200944907 /* VendingMachineUI.rb */;
+		functionName = deposit_money_clicked;
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 59;
+		modificationTime = 264893681.73043;
+		state = 1;
+	};
+	AC03B9200FC9F5FB00BBD42C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = ACB67E150FC8CC0200944907 /* VendingMachineUI.rb */;
+		name = "VendingMachineUI.rb: 79";
+		rLen = 0;
+		rLoc = 2200;
+		rType = 0;
+		vrLen = 331;
+		vrLoc = 702;
+	};
+	AC03B9220FC9F5FD00BBD42C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = ACB67E150FC8CC0200944907 /* VendingMachineUI.rb */;
+		name = "VendingMachineUI.rb: 79";
+		rLen = 0;
+		rLoc = 2200;
+		rType = 0;
+		vrLen = 854;
+		vrLoc = 637;
 	};
 	AC5C43890FBF6E46003A9F44 /* vending */ = {
 		isa = PBXExecutable;
@@ -128,20 +187,10 @@
 	};
 	ACB67E150FC8CC0200944907 /* VendingMachineUI.rb */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {691, 848}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 141}";
+			sepNavIntBoundsRect = "{{0, 0}, {1172, 1232}}";
+			sepNavSelRange = "{2200, 0}";
+			sepNavVisRange = "{637, 854}";
 		};
-	};
-	ACB67E1A0FC8CCE400944907 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = ACB67E150FC8CC0200944907 /* VendingMachineUI.rb */;
-		name = "VendingMachineUI.rb: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 141;
-		vrLoc = 0;
 	};
 	ACB67E1B0FC8CCE400944907 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -171,16 +220,6 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 140;
-		vrLoc = 0;
-	};
-	ACB67E1E0FC8CCE400944907 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = ACB67E110FC8CBF700944907 /* vending.rb */;
-		name = "vending.rb: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 128;
 		vrLoc = 0;
 	};
 	ACB67E1F0FC8CCE400944907 /* PBXTextBookmark */ = {
@@ -224,26 +263,6 @@
 		vrLoc = 0;
 	};
 	ACB67E230FC8CCE400944907 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = ACB67E110FC8CBF700944907 /* vending.rb */;
-		name = "vending.rb: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 128;
-		vrLoc = 0;
-	};
-	ACB67E240FC8CCE400944907 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = ACB67E100FC8CBF700944907 /* purse.rb */;
-		name = "purse.rb: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 140;
-		vrLoc = 0;
-	};
-	ACB67E250FC8CCE400944907 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = ACB67E110FC8CBF700944907 /* vending.rb */;
 		name = "vending.rb: 1";
