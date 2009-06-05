@@ -8,7 +8,7 @@
 
 class VendingMachineUI
   attr_accessor :sale_items_view, :exact_change_button, :denomination_popup
-  attr_accessor :amount_deposited_text, :dispensary_bin
+  attr_accessor :amount_deposited_text, :dispensary_bin, :change_bin
   
   def awakeFromNib
     @vending_machine = VendingMachine.new 'password'
@@ -39,6 +39,7 @@ class VendingMachineUI
   	
     @sale_items_view.dataSource = VendingTableItemsDataSource.new @vending_machine
     @dispensary_bin.dataSource = DispensaryBinItemsDataSource.new @vending_machine
+    @change_bin.dataSource = ChangeBinItemsDataSource.new @vending_machine
     update_view
   end
   
@@ -77,7 +78,7 @@ class VendingMachineUI
   
   def make_selection(column)
     @vending_machine.make_selection column
-    [sale_items_view, dispensary_bin].each{|table| table.reloadData}
+    [sale_items_view, dispensary_bin, change_bin].each{|table| table.reloadData}
     update_view
   end
 end
@@ -108,5 +109,19 @@ class DispensaryBinItemsDataSource
   
   def tableView(view, objectValueForTableColumn:column, row:index)
     @vending_machine.dispensary[index]
+  end
+end
+
+class ChangeBinItemsDataSource
+  def initialize(vending_machine)
+    @vending_machine = vending_machine
+  end
+  
+  def numberOfRowsInTableView(view)
+    @vending_machine.coin_return.size
+  end
+  
+  def tableView(view, objectValueForTableColumn:column, row:index)
+    @vending_machine.coin_return[index]
   end
 end

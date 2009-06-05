@@ -1,0 +1,34 @@
+Technical requirements for running the code:
+	Ruby 1.9.1 or later
+	RSpec gem (for running specs)
+	
+MacRuby
+	Ruby built on Objective-C 
+		in same way JRuby is Ruby built on Java & IronRuby is Ruby on C#
+	Ruby and Obj-C share common ancestry: Smalltalk
+		Obj-C has Smalltalk-style message passing and mixin-able classes
+	As with the other implementations, MacRuby programs have access to Ruby libraries and Objective-C frameworks
+	Code Syntax comparison	
+
+	Ruby Modules <==> Objective-C Categories
+	Protocols (NSTableDataSource)
+
+	InterfaceBuilder integration (demo)
+		Outlets
+		Actions
+	HotCocoa (demo - Pomodori)
+		DSL for graphical Ruby UIs
+	
+	Ultimate Goal of MacRuby is to make Ruby a 1st-class language for writing native OSX applications
+		Embed MacRuby into Objective-C applications
+		LLVM compiler infrastructure
+		From macruby.org:
+		"The new VM transforms the abstract source tree (AST) directly from the parser into LLVM’s intermediate representation (IR), which is then compiled into optimized machine code. A number of other key optimizations have also been completed, such as fast fixnum arithmetic, cached method dispatch, zero-cost IA64 exceptions, fast instance variable access, constants caching, fast break/next, cheap local variables, tail call optimization and much more."
+	Current development state of the language
+		0.4 latest stable release
+		Passes 85% ruby language specs
+		RSpec doesn't work :(   Though Test::Unit does :p
+		Has introduced at least 1 basic change to language semantics to more easily accommodate needs of Objective-C integration (evil_macruby.rb example)
+	Wanted to do (but couldn't pull off)
+		Transparent bean-like callback without dirtying the class
+	Missing GUI testing toolkit (like Jemmy for Java)	

@@ -1,0 +1,12 @@
+VendingMode
+	add_money
+	cancel
+	make_selection
+	service
+	
+	
+ServiceMode
+	stock
+	deposit
+	empty_bank
+	activate_vending
